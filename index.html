@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111214">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>ALFA OS – Equipamentos</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mut:#667085;--bd:#e3e6eb;--ac:#c8161d;--acx:#fff;--chip:#f3e8e8;--dg:#b42318;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1318;--card:#181e26;--tx:#eef1f5;--mut:#98a2b3;--bd:#2a323d;--ac:#ff5a5f;--acx:#2a0507;--chip:#2b2224;--dg:#f97066;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1318;--card:#181e26;--tx:#eef1f5;--mut:#98a2b3;--bd:#2a323d;--ac:#ff5a5f;--acx:#2a0507;--chip:#2b2224;--dg:#f97066;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 96px}
+h1{font-size:20px;margin:0}
+.sub{color:var(--mut);font-size:14px;margin:2px 0 14px}
+input,textarea{width:100%;font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:11px 12px}
+input:focus,textarea:focus{outline:2px solid var(--ac);outline-offset:0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.chip{flex:none;border:0;background:var(--chip);color:var(--tx);border-radius:999px;padding:7px 13px;font:inherit;font-size:14px}
+.chip.on{background:var(--ac);color:var(--acx)}
+.item{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-top:10px;font:inherit;color:var(--tx)}
+.item b{text-transform:capitalize}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.mut{color:var(--mut);font-size:14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:12px;background:var(--chip);border-radius:6px;padding:3px 7px}
+.empty{text-align:center;color:var(--mut);padding:30px 0}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--ac);color:var(--acx);font-size:30px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:5}
+.ov.show{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+.btns{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;border:0;border-radius:10px;padding:12px;font:inherit;background:var(--chip);color:var(--tx)}
+.btn.p{background:var(--ac);color:var(--acx)}
+.btn.d{color:var(--dg)}
+.brand{background:#111214;border-radius:16px;padding:14px 12px 12px;text-align:center;margin-bottom:14px}.brand img{display:block;margin:0 auto;width:min(260px,72%);height:auto}.brand .hn{color:#fff;font-weight:600;margin-top:4px}.brand .sub{color:#a3a3a3;margin:2px 0 0}
+.tag.w{background:var(--dg);color:#fff}
+.th{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:none}
+.bar{display:flex;gap:8px;margin:0 0 10px}.bar .btn{padding:9px 6px;font-size:14px}
+.ph{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-top:8px;display:none}
+.msg{font-size:13px;color:var(--mut);margin-top:10px;min-height:18px}
+.tb.on{background:var(--ac);color:var(--acx)}
+.pk{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin-top:8px}.pk input{width:22px;height:22px;padding:0;flex:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><img src="logo.png" alt="ALFA – soluções em serviços técnicos"><div class="hn">Hospital UNIMED Manaus</div><div class="sub" id="meta"></div></div>
+  <div class="bar"><button class="btn" id="exp">Compartilhar lista</button><button class="btn" id="syn">Planilha</button></div>
+  <div class="bar"><button class="btn tb on" id="t1">Equipamentos</button><button class="btn tb" id="t2">Serviço do dia</button></div>
+  <div id="v1">
+  <input id="q" type="search" placeholder="Buscar equipamento, marca, modelo, NS, TSE…">
+  <div class="chips" id="chips"></div>
+  <div id="list"></div>
+  </div>
+  <div id="v2" style="display:none">
+    <label class="mut" for="d_dia">Data do serviço</label><input id="d_dia" type="date">
+    <div class="mut" id="d_sum" style="margin:10px 0"></div>
+    <div class="bar"><button class="btn p" id="d_add">+ Adicionar equipamentos</button><button class="btn" id="d_pdf">Gerar PDF</button></div>
+    <div id="d_list"></div>
+  </div>
+</div>
+<button class="fab" id="add" aria-label="Adicionar equipamento">+</button>
+
+<div class="ov" id="ov">
+  <div class="sheet">
+    <h1 id="st">Equipamento</h1>
+    <label for="f_e">Equipamento</label><input id="f_e">
+    <label for="f_m">Marca</label><input id="f_m">
+    <label for="f_mo">Modelo</label><input id="f_mo">
+    <label for="f_ns">NS (número de série)</label><input id="f_ns">
+    <label for="f_tse">TSE</label><input id="f_tse">
+    <label for="f_cal">Calibração</label><input id="f_cal">
+    <label for="f_obs">Observações</label><textarea id="f_obs" rows="3"></textarea>
+    <label for="f_ven">Vencimento da calibração</label><input id="f_ven" type="date">
+    <label for="f_set">Setor / local</label><input id="f_set">
+    <label for="f_sta">Status</label><input id="f_sta" list="stl"><datalist id="stl"><option value="Em uso"><option value="Em manutenção"><option value="Fora de uso"></datalist>
+    <label for="f_dat">Data do serviço</label><input id="f_dat" type="date">
+    <label for="f_fo">Foto</label><input id="f_fo" type="file" accept="image/*"><img id="ph" class="ph" alt=""><button class="btn" id="rmf" style="display:none;margin-top:8px;width:100%">Remover foto</button>
+    <div class="btns">
+      <button class="btn" id="cancel">Cancelar</button>
+      <button class="btn p" id="save">Salvar</button>
+    </div>
+    <div class="btns"><button class="btn d" id="del">Excluir</button></div>
+  </div>
+</div>
+
+<div class="ov" id="ov2"><div class="sheet"><h1>Planilha</h1>
+  <label for="s_url">Endereço do script (termina em /exec)</label><input id="s_url">
+  <label for="s_tok">Código</label><input id="s_tok">
+  <div class="btns"><button class="btn" id="s_dn">Baixar da planilha</button><button class="btn p" id="s_up">Enviar para a planilha</button></div>
+  <div class="msg" id="s_msg"></div>
+  <div class="btns"><button class="btn" id="s_x">Fechar</button></div></div></div>
+<div class="ov" id="ov3"><div class="sheet"><h1>Adicionar ao dia</h1>
+  <input id="p_q" type="search" placeholder="Buscar…" style="margin-top:10px"><div id="p_list"></div>
+  <div class="btns"><button class="btn" id="p_x">Cancelar</button><button class="btn p" id="p_ok">Adicionar</button></div></div></div>
+<script src="jspdf.umd.min.js"></script>
+<script>
+var KEY="blindagem:v1";
+var SEED=[
+["cardiovesor","PHILIPS","HEARTSTART","US00589460","SE12813","L64043",""],
+["cardiovesor","INSTRAMED","CARDIO MAX","50311CM7361","SE12814","L64044",""],
+["cardiovesor","NIHON KOHDEN","CARDIOLIFE","*00159","SE12815","L64045",""],
+["monitor","NIHON KOHDEN","LIFE SCOPE","20006","SE12816","L64046",""],
+["compressor do colchão","BIOLAND","CP100","230715","SE12817","",""],
+["cama","VALLITECH","VTE04-BG","99681","SE12818","",""],
+["cardiovesor","INSTRAMED","CARDIOMAX","50309 CM 7359","","L64047",""],
+["cardiovesor","INSTRAMED","CARDIOMAX","40522CM6422","SE12819","L64048",""],
+["cardiovesor","","","","","",""]
+];
+var F=["e","m","mo","ns","tse","cal","obs","ven","set","sta","dat"];
+var data=[],filter="todos",editing=-1,delArmed=false;
+
+function load(){
+  try{var s=localStorage.getItem(KEY);if(s){var d=JSON.parse(s);if(Array.isArray(d))return d;}}catch(e){}
+  return SEED.map(function(r){var o={};F.forEach(function(k,i){o[k]=r[i];});return o;});
+}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){alert("Sem espaço para salvar. Remova algumas fotos.");}}
+function fd(s){var p=s.split("-");return p.length==3?p[2]+"/"+p[1]+"/"+p[0]:s;}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function type(o){return (o.e||"").trim().toLowerCase()||"sem nome";}
+function $(id){return document.getElementById(id);}
+
+function render(){
+  var q=$("q").value.trim().toLowerCase(),d=new Date(),today=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+  var counts={};
+  data.forEach(function(o){var t=type(o);counts[t]=(counts[t]||0)+1;});
+  var types=Object.keys(counts).sort();
+  if(filter!=="todos"&&!counts[filter])filter="todos";
+  var h='<button class="chip'+(filter==="todos"?" on":"")+'" data-t="todos">Todos ('+data.length+')</button>';
+  types.forEach(function(t){h+='<button class="chip'+(filter===t?" on":"")+'" data-t="'+esc(t)+'">'+esc(t)+' ('+counts[t]+')</button>';});
+  $("chips").innerHTML=h;
+  var out="",n=0;
+  data.forEach(function(o,i){
+    if(filter!=="todos"&&type(o)!==filter)return;
+    var hay=F.map(function(k){return o[k]||"";}).join(" ").toLowerCase();
+    if(q&&hay.indexOf(q)<0)return;
+    n++;
+    var sub=[o.m,o.mo,o.set].filter(Boolean).join(" · ")||"sem marca/modelo",od=o.ven&&o.ven<today;
+    out+='<button class="item" data-i="'+i+'"><div class="row"><div><b>'+esc(type(o))+'</b><div class="mut">'+esc(sub)+'</div></div>'+(o.foto?'<img class="th" src="'+o.foto+'" alt="">':'')+'</div><div class="tags">'
+      +(o.sta?'<span class="tag">'+esc(o.sta)+'</span>':'')
+      +(o.ns?'<span class="tag">NS '+esc(o.ns)+'</span>':'')
+      +(o.tse?'<span class="tag">TSE '+esc(o.tse)+'</span>':'')
+      +(o.cal?'<span class="tag">Calib. '+esc(o.cal)+'</span>':'')
+      +(o.ven?'<span class="tag'+(od?' w':'')+'">'+(od?'Vencida ':'Vence ')+esc(fd(o.ven))+'</span>':'')
+      +(o.dat?'<span class="tag">Serviço '+esc(fd(o.dat))+'</span>':'')
+      +'</div>'+(o.obs?'<div class="mut" style="margin-top:6px">'+esc(o.obs)+'</div>':'')+'</button>';
+  });
+  $("list").innerHTML=n?out:'<div class="empty">Nenhum equipamento encontrado.</div>';
+  $("meta").textContent="Out/2026 · "+n+" de "+data.length+" equipamentos";
+  renderDay();
+}
+
+function openSheet(i){
+  editing=i;delArmed=false;
+  var o=i>=0?data[i]:{};
+  F.forEach(function(k){$("f_"+k).value=o[k]||"";});
+  cur=o.foto||"";showPh();
+  $("st").textContent=i>=0?"Editar equipamento":"Novo equipamento";
+  $("del").style.display=i>=0?"block":"none";
+  $("del").textContent="Excluir";
+  $("ov").classList.add("show");
+}
+function closeSheet(){$("ov").classList.remove("show");}
+
+$("q").addEventListener("input",render);
+$("chips").addEventListener("click",function(e){var b=e.target.closest("[data-t]");if(!b)return;filter=b.getAttribute("data-t");render();});
+$("list").addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(!b)return;openSheet(+b.getAttribute("data-i"));});
+$("add").addEventListener("click",function(){openSheet(-1);});
+$("cancel").addEventListener("click",closeSheet);
+$("ov").addEventListener("click",function(e){if(e.target===$("ov"))closeSheet();});
+$("save").addEventListener("click",function(){
+  var o={};F.forEach(function(k){o[k]=$("f_"+k).value.trim();});if(cur)o.foto=cur;
+  if(editing>=0)data[editing]=o;else data.push(o);
+  persist();closeSheet();render();
+});
+$("del").addEventListener("click",function(){
+  if(!delArmed){delArmed=true;$("del").textContent="Toque de novo para excluir";return;}
+  data.splice(editing,1);persist();closeSheet();render();
+});
+
+var cur="";
+function showPh(){var p=$("ph");p.style.display=cur?"block":"none";if(cur)p.src=cur;$("rmf").style.display=cur?"block":"none";$("f_fo").value="";}
+$("f_fo").addEventListener("change",function(){var f=this.files[0];if(!f)return;var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var s=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);cur=c.toDataURL("image/jpeg",0.7);URL.revokeObjectURL(u);showPh();};im.src=u;});
+$("rmf").addEventListener("click",function(){cur="";showPh();});
+
+function csv(){var H=["Equipamento","Marca","Modelo","NS","TSE","Calibração","Observações","Vencimento","Setor","Status","Data do serviço"];
+  var q=function(v){return '"'+String(v||"").replace(/"/g,'""')+'"';};
+  return "\ufeff"+[H.map(q).join(";")].concat(data.map(function(o){return F.map(function(k){return q(o[k]);}).join(";");})).join("\r\n");}
+$("exp").addEventListener("click",function(){
+  var f=new File([csv()],"equipamentos.csv",{type:"text/csv"});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Equipamentos"}).catch(function(){});return;}
+  var a=document.createElement("a");a.href=URL.createObjectURL(f);a.download="equipamentos.csv";document.body.appendChild(a);a.click();a.remove();
+});
+
+var SK="blindagem:sync";
+function sget(){try{return JSON.parse(localStorage.getItem(SK))||{};}catch(e){return {};}}
+function smsg(t){$("s_msg").textContent=t;}
+function sset(){var u=$("s_url").value.trim(),t=$("s_tok").value.trim();try{localStorage.setItem(SK,JSON.stringify({u:u,t:t}));}catch(e){}return {u:u,t:t};}
+$("syn").addEventListener("click",function(){var s=sget();$("s_url").value=s.u||"";$("s_tok").value=s.t||"";smsg("");$("ov2").classList.add("show");});
+$("s_x").addEventListener("click",function(){$("ov2").classList.remove("show");});
+$("s_dn").addEventListener("click",function(){var s=sset();if(!s.u){smsg("Cole o endereço do script.");return;}smsg("Baixando…");
+  fetch(s.u+"?t="+encodeURIComponent(s.t)).then(function(r){return r.json();}).then(function(j){
+    if(!j.ok){smsg("Erro: "+j.erro);return;}
+    var ph={};data.forEach(function(o){if(o.foto&&o.ns)ph[o.ns]=o.foto;});
+    data=j.items.map(function(o){if(ph[o.ns])o.foto=ph[o.ns];return o;});
+    persist();render();smsg("Pronto: "+data.length+" equipamentos baixados.");
+  }).catch(function(){smsg("Não consegui conectar. Verifique o endereço e a internet.");});});
+$("s_up").addEventListener("click",function(){var s=sset();if(!s.u){smsg("Cole o endereço do script.");return;}smsg("Enviando…");
+  var items=data.map(function(o){var c={};F.forEach(function(k){c[k]=o[k]||"";});return c;});
+  fetch(s.u,{method:"POST",body:JSON.stringify({t:s.t,items:items})}).then(function(r){return r.json();}).then(function(j){
+    smsg(j.ok?"Pronto: "+j.count+" equipamentos enviados.":"Erro: "+j.erro);
+  }).catch(function(){smsg("Não consegui conectar. Verifique o endereço e a internet.");});});
+
+function todayStr(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+function dayItems(){var d=$("d_dia").value;return d?data.filter(function(o){return o.dat===d;}):[];}
+function renderDay(){
+  var it=dayItems(),c={};
+  it.forEach(function(o){var t=type(o);c[t]=(c[t]||0)+1;});
+  var parts=Object.keys(c).sort().map(function(t){return c[t]+" "+t;});
+  $("d_sum").textContent=it.length?it.length+" equipamento(s) em "+fd($("d_dia").value)+": "+parts.join(", ")+".":"Nenhum equipamento neste dia.";
+  $("d_list").innerHTML=it.map(function(o){return '<button class="item" data-i="'+data.indexOf(o)+'"><b>'+esc(type(o))+'</b><div class="mut">'+esc([o.m,o.mo].filter(Boolean).join(" · "))+'</div><div class="tags">'+(o.ns?'<span class="tag">NS '+esc(o.ns)+'</span>':'')+(o.cal?'<span class="tag">Calib. '+esc(o.cal)+'</span>':'')+(o.tse?'<span class="tag">TSE '+esc(o.tse)+'</span>':'')+'</div></button>';}).join("");
+}
+function tab(n){$("v1").style.display=n==1?"":"none";$("v2").style.display=n==2?"":"none";$("t1").classList.toggle("on",n==1);$("t2").classList.toggle("on",n==2);if(n==2)renderDay();}
+$("t1").addEventListener("click",function(){tab(1);});
+$("t2").addEventListener("click",function(){tab(2);});
+$("d_dia").addEventListener("change",renderDay);
+$("d_list").addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(!b)return;openSheet(+b.getAttribute("data-i"));});
+
+var sel={};
+function pick(){var q=$("p_q").value.trim().toLowerCase(),d=$("d_dia").value,h="";
+  data.forEach(function(o,i){if(o.dat===d)return;var hay=F.map(function(k){return o[k]||"";}).join(" ").toLowerCase();if(q&&hay.indexOf(q)<0)return;
+    h+='<label class="pk"><input type="checkbox" value="'+i+'"'+(sel[i]?' checked':'')+'><span><b>'+esc(type(o))+'</b> <span class="mut">'+esc([o.m,o.mo,o.ns].filter(Boolean).join(" · "))+'</span></span></label>';});
+  $("p_list").innerHTML=h||'<div class="empty">Nada para adicionar.</div>';}
+$("d_add").addEventListener("click",function(){if(!$("d_dia").value)return;sel={};$("p_q").value="";pick();$("ov3").classList.add("show");});
+$("p_list").addEventListener("change",function(e){sel[e.target.value]=e.target.checked;});
+$("p_q").addEventListener("input",pick);
+$("p_x").addEventListener("click",function(){$("ov3").classList.remove("show");});
+$("p_ok").addEventListener("click",function(){var d=$("d_dia").value;Object.keys(sel).forEach(function(i){if(sel[i])data[i].dat=d;});persist();$("ov3").classList.remove("show");render();});
+
+function send(f,t){
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:t}).catch(function(){});return;}
+  var a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+}
+function pdf(){
+  var it=dayItems(),d=$("d_dia").value;
+  if(!it.length){alert("Nenhum equipamento neste dia.");return;}
+  var doc=new window.jspdf.jsPDF({orientation:"landscape",unit:"mm",format:"a4"}),W=297,M=12,y;
+  var cols=[["Equipamento","e",55],["Marca","m",45],["Modelo","mo",50],["Nº de série","ns",55],["Calibração","cal",34],["TSE","tse",34]];
+  var img=null;try{var lg=document.querySelector(".brand img"),cv=document.createElement("canvas");cv.width=240;cv.height=243;cv.getContext("2d").drawImage(lg,0,0,240,243);img=cv.toDataURL("image/jpeg",0.9);}catch(e){}
+  function head(){doc.setFillColor(17,18,20);doc.rect(0,0,W,30,"F");if(img)doc.addImage(img,"JPEG",M,3,24,24);
+    doc.setTextColor(255);doc.setFont("helvetica","bold");doc.setFontSize(16);doc.text("Relatório de serviços realizados",M+30,13);
+    doc.setFont("helvetica","normal");doc.setFontSize(10);doc.text("ALFA - soluções em serviços técnicos",M+30,20);doc.text("Hospital UNIMED Manaus",M+30,25.5);doc.setTextColor(0);}
+  function th(){doc.setFillColor(200,22,29);doc.rect(M,y,W-2*M,8,"F");doc.setTextColor(255);doc.setFont("helvetica","bold");doc.setFontSize(10);
+    var x=M;cols.forEach(function(c){doc.text(c[0],x+2,y+5.5);x+=c[2];});doc.setTextColor(0);doc.setFont("helvetica","normal");y+=8;}
+  var c={};it.forEach(function(o){var t=type(o);c[t]=(c[t]||0)+1;});
+  var sum=Object.keys(c).sort().map(function(t){return c[t]+" "+t;}).join(", ");
+  head();doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text("Data do serviço: "+fd(d),M,38);
+  doc.setFont("helvetica","normal");doc.setFontSize(10);
+  var sl=doc.splitTextToSize("Total: "+it.length+" equipamento(s) - "+sum,W-2*M);doc.text(sl,M,44);
+  y=44+sl.length*4.5+3;th();
+  it.forEach(function(o,r){
+    var cells=cols.map(function(k){return doc.splitTextToSize(String(o[k[1]]||"-"),k[2]-4);});
+    var n=Math.max.apply(null,cells.map(function(a){return a.length;})),h=n*4.2+3.5;
+    if(y+h>196){doc.addPage();head();y=36;th();}
+    if(r%2){doc.setFillColor(245,245,245);doc.rect(M,y,W-2*M,h,"F");}
+    var x=M;cells.forEach(function(a,i){doc.text(a,x+2,y+5);x+=cols[i][2];});
+    doc.setDrawColor(220);doc.line(M,y+h,W-M,y+h);y+=h;
+  });
+  var N=doc.getNumberOfPages(),now=new Date().toLocaleString("pt-BR");
+  for(var p=1;p<=N;p++){doc.setPage(p);doc.setFontSize(8);doc.setTextColor(120);doc.text("Gerado em "+now+" - Página "+p+" de "+N,W-M,205,{align:"right"});}
+  window.__pdf=doc;
+  send(new File([doc.output("blob")],"relatorio-"+d+".pdf",{type:"application/pdf"}),"Relatório "+fd(d));
+}
+$("d_pdf").addEventListener("click",pdf);
+$("d_dia").value=todayStr();
+
+data=load();
+render();
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
+</script>
+</body>
+</html>
